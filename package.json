@@ -1,0 +1,34 @@
+{
+  "name": "ai-docx-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev":           "next dev",
+    "build":         "next build",
+    "build:ghpages": "set DEPLOY_TARGET=ghpages && next build",
+    "export":        "next build",
+    "start":         "npx serve@latest out --single",
+    "lint":          "eslint"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "katex": "^0.16.38",
+    "markdown-it": "^14.1.1",
+    "markdown-it-katex": "^2.0.3",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/katex": "^0.16.8",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
