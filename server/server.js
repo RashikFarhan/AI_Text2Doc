@@ -40,7 +40,7 @@ app.post('/export', (req, res) => {
       ? `--reference-doc="${TEMPLATE_PATH}"`
       : '';
 
-    const command = `pandoc "${inputPath}" -o "${outputPath}" --mathml ${referenceFlag}`.trim();
+    const command = `pandoc -f markdown+hard_line_breaks "${inputPath}" -o "${outputPath}" --mathml ${referenceFlag}`.trim();
 
     console.log(`[export] Running: ${command}`);
     if (!templateExists) {

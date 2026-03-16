@@ -79,8 +79,8 @@ export function normalizeText(input: string): string {
   // 3e. Fix whitespace inside bold/italic tags that break markdown parsers.
   // AI sometimes outputs "**bold **" or "*italic *". Pandoc/markdown-it requires
   // no internal boundary space. This pulls trailing spaces OUTSIDE the asterisks.
-  text = text.replace(/\*\*([^\*\n]+?)\s+\*\*/g, "**$1** ");
-  text = text.replace(/(^|[^\*])\*([^\*\n]+?)\s+\*(?=[^\*]|$)/g, "$1*$2* ");
+  text = text.replace(/\*\*([^\*\n]+?)[ \t]+\*\*/g, "**$1** ");
+  text = text.replace(/(^|[^\*])\*([^\*\n]+?)[ \t]+\*(?=[^\*]|$)/g, "$1*$2* ");
 
   // 3f. Collapse 3+ blank lines → 2
   text = text.replace(/\n{3,}/g, "\n\n");

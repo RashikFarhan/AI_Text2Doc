@@ -5,6 +5,7 @@ import mk from "markdown-it-katex";
 const md = new MarkdownIt({
   html: true,
   linkify: true,
+  breaks: true,
   // typographer MUST be false — it replaces quotes/dashes/ellipses
   // which corrupts LaTeX symbols like \text{...} and prime marks
   typographer: false,
