@@ -23,7 +23,6 @@ export default function Home() {
         <div className="app-logo">
           <div className="app-logo-icon">✦</div>
           AI Text Formatter
-          <span className="app-badge">Beta</span>
         </div>
         <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
           Markdown + LaTeX → DOCX
