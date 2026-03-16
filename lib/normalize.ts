@@ -85,7 +85,12 @@ export function normalizeText(input: string): string {
   // 3f. Collapse 3+ blank lines → 2
   text = text.replace(/\n{3,}/g, "\n\n");
 
-  // 3g. Trim leading & trailing whitespace per line
+  // 3g. AI often injects physical newlines (\n) immediately after <br> tags inside tables.
+  // Markdown pipe tables STRICTLY forbid newlines. This strips all invisible spaces/newlines
+  // directly following a <br>, forcefully pulling the fragmented cell back onto one line.
+  text = text.replace(/(<br\s*\/?>)\s+/gi, "$1");
+
+  // 3h. Trim leading & trailing whitespace per line
   text = text.split("\n").map((l) => l.trimStart().trimEnd()).join("\n");
 
   // ── Step 4: Pipe-table repair (Pandoc-safe) ────────────────────────────────
