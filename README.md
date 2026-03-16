@@ -60,28 +60,6 @@ normalizeText()        ← fixes AI formatting quirks
 
 ---
 
-## Do I Need to Upload node_modules?
-
-**No.** Never upload `node_modules` to GitHub. Here's why:
-
-- `node_modules` contains thousands of files totalling hundreds of MB
-- It is listed in `.gitignore` — Git automatically ignores it
-- When someone clones the repo, they run `npm install` and npm downloads all packages fresh from the internet in under a minute
-- The `package.json` file tells npm exactly which packages and versions to download — this is all that needs to be in the repo
-
-**What DOES need to be in the repo:**
-- All source code files (`app/`, `components/`, `lib/`, `server/`)
-- Config files (`next.config.ts`, `package.json`, `tsconfig.json`, etc.)
-- The `/out` folder (only if deploying via GitHub Pages branch — see deployment section)
-- `server/template/template.docx` (the Pandoc Word template)
-
-**What does NOT go in the repo:**
-- `node_modules/` (root) — ignored by `.gitignore`
-- `server/node_modules/` — ignored by `.gitignore`
-- `.next/` (Next.js build cache) — ignored by `.gitignore`
-
----
-
 ## Requirements
 
 You need these installed on your computer before starting:
