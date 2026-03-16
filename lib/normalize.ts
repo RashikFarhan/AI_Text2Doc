@@ -72,10 +72,20 @@ export function normalizeText(input: string): string {
   // 3c. "1) item" → "1. item"
   text = text.replace(/^(\d{1,2})\)\s+/gm, "$1. ");
 
-  // 3d. Collapse 3+ blank lines → 2
+  // 3d. Fix bullets broken over two lines (e.g. '*' on its own line)
+  // Matches " * \n text" and joins them to "* text"
+  text = text.replace(/^(\s*[\*\-\+])\s*\n\s*([^\n\*\-\+\|])/gm, "$1 $2");
+
+  // 3e. Fix whitespace inside bold/italic tags that break markdown parsers.
+  // AI sometimes outputs "**bold **" or "*italic *". Pandoc/markdown-it requires
+  // no internal boundary space. This pulls trailing spaces OUTSIDE the asterisks.
+  text = text.replace(/\*\*([^\*\n]+?)\s+\*\*/g, "**$1** ");
+  text = text.replace(/(^|[^\*])\*([^\*\n]+?)\s+\*(?=[^\*]|$)/g, "$1*$2* ");
+
+  // 3f. Collapse 3+ blank lines → 2
   text = text.replace(/\n{3,}/g, "\n\n");
 
-  // 3e. Trim leading & trailing whitespace per line
+  // 3g. Trim leading & trailing whitespace per line
   text = text.split("\n").map((l) => l.trimStart().trimEnd()).join("\n");
 
   // ── Step 4: Pipe-table repair (Pandoc-safe) ────────────────────────────────
