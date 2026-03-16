@@ -1,8 +1,11 @@
 # AI Text → DOCX App
 
+**⚠️ IMPORTANT NOTE FOR WEB USERS ⚠️**  
+> **The "Export to DOCX" button ONLY WORKS when running the app locally on your PC.**  
+> If you are using the web version, the export feature will fail. Instead, use the **"Copy Content"** button in the preview pane to copy the formatted text and paste it directly into Microsoft Word.
+
 A browser-based tool that takes AI-generated text (Markdown + LaTeX), shows a live formatted preview, and exports it to a polished Word document (`.docx`) using Pandoc.
 
-> **Export works locally only.** The preview works on GitHub Pages. DOCX export requires the backend server running on your computer.
 
 ---
 
