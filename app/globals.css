@@ -322,6 +322,17 @@ body {
   flex-shrink: 0;
 }
 
+/* ─── KaTeX Anti-Prose Overrides ─────────────────────── */
+.prose .katex {
+  font-size: 1.15em;
+  line-height: normal !important;
+}
+.prose .katex * {
+  line-height: normal !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 /* ─── Mobile Responsiveness ──────────────────────────── */
 @media (max-width: 768px) {
   .app-main {

@@ -47,9 +47,15 @@ export default function ExportButton({ text }: ExportButtonProps) {
       a.remove();
       URL.revokeObjectURL(url);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Export failed";
+      let message = err instanceof Error ? err.message : "Export failed";
+      
+      // Catch network errors specifically (which happens on Vercel since localhost:5000 is unreachable)
+      if (err instanceof TypeError && message.toLowerCase().includes("fetch")) {
+        message = "DOCX Export only works locally. Please run 'run.bat' on your PC.";
+      }
+      
       setError(message);
-      setTimeout(() => setError(null), 4000);
+      setTimeout(() => setError(null), 8000);
     } finally {
       setLoading(false);
     }
