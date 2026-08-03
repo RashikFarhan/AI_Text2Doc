@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { renderMarkdown } from "@/lib/markdown";
+import { prepareClipboardData } from "@/lib/clipboard";
 import "katex/dist/katex.min.css";
 
 interface PreviewProps {
@@ -17,19 +18,11 @@ export default function Preview({ text }: PreviewProps) {
   const handleCopy = async () => {
     if (!contentRef.current) return;
     try {
-      let htmlContent = contentRef.current.innerHTML;
-      const textContent = contentRef.current.innerText;
-
-      // Add inline style fallbacks so pasting into Word/Docs retains table borders
-      if (htmlContent.includes("<table")) {
-        htmlContent = htmlContent
-          .replace(/<table(?![^>]*style)/gi, '<table style="border-collapse: collapse; width: 100%; margin: 12px 0;"')
-          .replace(/<th(?![^>]*style)/gi, '<th style="border: 1px solid #888; padding: 6px 10px; background-color: rgba(120,120,120,0.15); font-weight: bold;"')
-          .replace(/<td(?![^>]*style)/gi, '<td style="border: 1px solid #888; padding: 6px 10px;"');
-      }
+      const { html: htmlContent, text: textContent } = await prepareClipboardData(contentRef.current);
 
       // Write rich HTML + plain text to clipboard buffer.
-      // This allows pasting formatted text + tables directly into Word or Google Docs.
+      // Converts SVG diagrams to embedded high-resolution PNGs so they paste
+      // with 100% fidelity into Microsoft Word, Google Docs, Apple Pages, etc.
       const clipboardItem = new ClipboardItem({
         "text/html": new Blob([htmlContent], { type: "text/html" }),
         "text/plain": new Blob([textContent], { type: "text/plain" }),
@@ -38,8 +31,8 @@ export default function Preview({ text }: PreviewProps) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy:", err);
-      // Fallback for browsers that don't support ClipboardItem (like older Firefox)
+      console.error("Failed to copy rich clipboard data:", err);
+      // Fallback for browsers that don't support ClipboardItem
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(contentRef.current.innerText);
         setCopied(true);
@@ -83,7 +76,7 @@ export default function Preview({ text }: PreviewProps) {
             {copied ? (
               <>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                Copied!
+                Copied for Word & Docs!
               </>
             ) : (
               <>
