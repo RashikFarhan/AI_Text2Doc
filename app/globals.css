@@ -322,15 +322,66 @@ body {
   flex-shrink: 0;
 }
 
-/* ─── KaTeX Anti-Prose Overrides ─────────────────────── */
+/* ─── KaTeX Anti-Prose Overrides & Layout Protection ── */
 .prose .katex {
-  font-size: 1.15em;
-  line-height: normal !important;
+  font-size: 1.1em;
+  text-indent: 0;
+  text-rendering: auto;
+  border-collapse: separate;
 }
+
+.prose .katex-display {
+  display: block;
+  margin: 1.25em 0;
+  text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0;
+}
+
+.prose .katex-display > .katex {
+  display: inline-block;
+  text-align: initial;
+}
+
 .prose .katex * {
-  line-height: normal !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+  border-color: transparent !important;
+}
+
+/* Ensure KaTeX vlist tables are not affected by Tailwind prose table styling */
+.prose .katex .vlist-t {
+  display: inline-table !important;
+  table-layout: fixed !important;
+  border-collapse: separate !important;
+}
+.prose .katex .vlist-r {
+  display: table-row !important;
+}
+.prose .katex .vlist {
+  display: table-cell !important;
+  vertical-align: bottom !important;
+  position: relative !important;
+}
+
+/* ─── Diagram & Code Block Styling ──────────────────── */
+.prose pre {
+  background: #0d1117 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 16px 20px !important;
+  overflow-x: auto !important;
+  font-family: 'Geist Mono', 'Fira Code', 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+
+.prose pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #e2e8f0 !important;
+  font-family: inherit !important;
+  white-space: pre !important;
 }
 
 /* ─── Mobile Responsiveness ──────────────────────────── */

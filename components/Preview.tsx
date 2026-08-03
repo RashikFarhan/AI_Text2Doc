@@ -17,8 +17,16 @@ export default function Preview({ text }: PreviewProps) {
   const handleCopy = async () => {
     if (!contentRef.current) return;
     try {
-      const htmlContent = contentRef.current.innerHTML;
+      let htmlContent = contentRef.current.innerHTML;
       const textContent = contentRef.current.innerText;
+
+      // Add inline style fallbacks so pasting into Word/Docs retains table borders
+      if (htmlContent.includes("<table")) {
+        htmlContent = htmlContent
+          .replace(/<table(?![^>]*style)/gi, '<table style="border-collapse: collapse; width: 100%; margin: 12px 0;"')
+          .replace(/<th(?![^>]*style)/gi, '<th style="border: 1px solid #888; padding: 6px 10px; background-color: rgba(120,120,120,0.15); font-weight: bold;"')
+          .replace(/<td(?![^>]*style)/gi, '<td style="border: 1px solid #888; padding: 6px 10px;"');
+      }
 
       // Write rich HTML + plain text to clipboard buffer.
       // This allows pasting formatted text + tables directly into Word or Google Docs.

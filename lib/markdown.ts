@@ -11,8 +11,11 @@ const md = new MarkdownIt({
   typographer: false,
 });
 
-// Register KaTeX plugin — processes $...$ and $$...$$ after markdown parsing
-md.use(mk);
+// Register KaTeX plugin with non-throwing error handling
+md.use(mk, {
+  throwOnError: false,
+  errorColor: "#f87171",
+});
 
 export function renderMarkdown(text: string): string {
   if (!text) return "";
