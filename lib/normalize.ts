@@ -195,7 +195,7 @@ export function normalizeText(input: string): string {
           continue;
         }
         // Flush diagram
-        processedLines.push("```text");
+        processedLines.push("```diagram");
         processedLines.push(...diagramBuffer);
         processedLines.push("```");
         inDiagram = false;
@@ -206,7 +206,7 @@ export function normalizeText(input: string): string {
   }
 
   if (inDiagram) {
-    processedLines.push("```text");
+    processedLines.push("```diagram");
     processedLines.push(...diagramBuffer);
     processedLines.push("```");
   }

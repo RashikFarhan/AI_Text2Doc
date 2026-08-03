@@ -384,6 +384,36 @@ body {
   white-space: pre !important;
 }
 
+/* ─── Vector Diagram Styles ─────────────────────────── */
+.diagram-svg-wrapper {
+  margin: 1.5em 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  background: #080c14;
+  padding: 12px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.diagram-svg {
+  display: block;
+  height: auto;
+  user-select: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.diagram-svg text {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.diagram-mono text {
+  font-family: 'Geist Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace !important;
+}
+
 /* ─── Mobile Responsiveness ──────────────────────────── */
 @media (max-width: 768px) {
   .app-main {
