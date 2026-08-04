@@ -112,19 +112,7 @@ export function normalizeText(input: string): string {
   // 2b. Normalize \( ... \) inline math to $ ... $
   text = text.replace(/\\\(([\s\S]*?)\\\)/g, (_, math) => `$${math.trim()}$`);
 
-  // 2c. Normalize standalone \begin{env} ... \end{env}
-  const mathEnvs = [
-    "equation", "equation\\*", "align", "align\\*", "aligned",
-    "gather", "gather\\*", "multline", "multline\\*", "flalign", "flalign\\*",
-    "alignat", "alignat\\*", "matrix", "pmatrix", "bmatrix", "Bmatrix", "vmatrix", "Vmatrix", "cases"
-  ];
-  const envRegex = new RegExp(`\\\\begin\\{(${mathEnvs.join("|")})\\}([\\s\\S]*?)\\\\end\\{\\1\\}`, "g");
-  text = text.replace(envRegex, (match, env, inner) => {
-    const safeEnv = env.startsWith("align") ? "aligned" : env;
-    return `$$\n\\begin{${safeEnv}}${inner}\\end{${safeEnv}}\n$$`;
-  });
-
-  // 2d. Protect $$ ... $$ block math
+  // 2c. Protect existing $$ ... $$ block math FIRST so inner environments (bmatrix, aligned, etc.) are never double-wrapped
   text = text.replace(/\$\$([\s\S]*?)\$\$/g, (_, math) => {
     let cleanMath = math.trim();
     // Convert \begin{align} to \begin{aligned} for KaTeX & Pandoc compatibility
@@ -136,7 +124,7 @@ export function normalizeText(input: string): string {
     return ph;
   });
 
-  // 2e. Protect $ ... $ inline math (distinguishing from currency like $500 to $1,000)
+  // 2d. Protect $ ... $ inline math (distinguishing from currency like $500 to $1,000)
   text = text.replace(/(^|[^\$])\$([^\$\n]+?)\$(?!\d)/g, (match, prefix, math) => {
     if (/^\s*\d+([,\.]\d+)?\s*$/.test(math)) {
       return match; // Currency, preserve as-is
@@ -147,6 +135,20 @@ export function normalizeText(input: string): string {
     const ph = `@@MATH_INLINE_${mathCounter++}@@`;
     mathMap.push({ placeholder: ph, original: `$${cleanMath}$` });
     return `${prefix}${ph}`;
+  });
+
+  // 2e. Normalize standalone \begin{env} ... \end{env} that were not enclosed in $$ or $
+  const mathEnvs = [
+    "equation", "equation\\*", "align", "align\\*", "aligned",
+    "gather", "gather\\*", "multline", "multline\\*", "flalign", "flalign\\*",
+    "alignat", "alignat\\*", "matrix", "pmatrix", "bmatrix", "Bmatrix", "vmatrix", "Vmatrix", "cases"
+  ];
+  const envRegex = new RegExp(`\\\\begin\\{(${mathEnvs.join("|")})\\}([\\s\\S]*?)\\\\end\\{\\1\\}`, "g");
+  text = text.replace(envRegex, (match, env, inner) => {
+    const safeEnv = env.startsWith("align") ? "aligned" : env;
+    const ph = `@@MATH_BLOCK_${mathCounter++}@@`;
+    mathMap.push({ placeholder: ph, original: `$$\n\\begin{${safeEnv}}${inner}\\end{${safeEnv}}\n$$` });
+    return ph;
   });
 
   // ── Step 3: Auto-detect ASCII diagrams / timelines / box charts ───────────
