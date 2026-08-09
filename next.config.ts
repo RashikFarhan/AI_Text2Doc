@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
   ...(isGhPages && { output: "export" }),
   basePath:    isGhPages ? BASE : "",
   assetPrefix: isGhPages ? BASE + "/" : "",
+  serverExternalPackages: ["pandoc-wasm"],
 };
 
 export default nextConfig;

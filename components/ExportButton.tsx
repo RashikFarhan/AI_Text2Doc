@@ -21,7 +21,7 @@ export default function ExportButton({ text }: ExportButtonProps) {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:5000/export", {
+      const response = await fetch("/api/export", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,9 +49,9 @@ export default function ExportButton({ text }: ExportButtonProps) {
     } catch (err) {
       let message = err instanceof Error ? err.message : "Export failed";
       
-      // Catch network errors specifically (which happens on Vercel since localhost:5000 is unreachable)
+      // Catch network errors specifically
       if (err instanceof TypeError && message.toLowerCase().includes("fetch")) {
-        message = "DOCX Export only works locally. Please run 'run.bat' on your PC.";
+        message = "Export is initializing or unavailable. If this persists, try again in a few seconds.";
       }
       
       setError(message);
