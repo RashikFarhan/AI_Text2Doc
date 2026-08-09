@@ -8,8 +8,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AI Text Formatter",
-  description: "Format AI-generated text and export to DOCX",
+  title: "AI Text Formatter — Format AI Text & Export to DOCX / PDF",
+  description: "Convert raw Markdown and LaTeX from AI tools like ChatGPT into perfectly formatted Word (.docx) documents and PDFs.",
+  verification: {
+    google: "google2d2d0b7de9a1ddde",
+  },
 };
 
 export default function RootLayout({
