@@ -317,14 +317,14 @@ body {
 .export-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 22px;
+  gap: 6px;
+  padding: 6px 10px;
   background: linear-gradient(135deg, var(--accent), #7c3aed);
   color: #fff;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   letter-spacing: 0.2px;
   box-shadow: 0 4px 20px var(--accent-glow);
@@ -479,10 +479,146 @@ body {
   background: linear-gradient(135deg, #475569, #334155);
 }
 
-/* ─── Header subtitle ────────────────────────────────── */
+/* ─── Header subtitle & Info Button ────────────────────── */
 .header-subtitle {
   font-size: 12px;
   color: var(--text-muted);
+}
+
+.info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  margin-left: 8px;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.info-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Info Flyout (SEO Friendly, CSS Hidden) ─────────── */
+.info-flyout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.info-flyout-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.info-flyout {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 400px;
+  height: 100vh;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-flyout.open {
+  transform: translateX(0);
+}
+
+.info-flyout-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-flyout-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.info-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  transition: all 0.2s;
+}
+
+.info-close-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.info-flyout-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.info-flyout-content p {
+  margin-bottom: 16px;
+}
+
+.info-flyout-content h3 {
+  font-size: 15px;
+  color: var(--text-primary);
+  margin: 24px 0 12px;
+  font-weight: 600;
+}
+
+.info-flyout-content h4 {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin: 20px 0 8px;
+  font-weight: 600;
+}
+
+.github-star-btn-large {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: var(--text-primary) !important;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s !important;
+  margin-bottom: 16px;
+}
+
+.github-star-btn-large:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--text-muted);
 }
 
 /* ─── Mobile Tabs (Hidden on Desktop) ────────────────── */
@@ -556,26 +692,33 @@ body {
     display: flex !important;
   }
 
-  /* Make export button full width on narrow screens */
+  /* Make footer small and hide word count on mobile */
   .app-footer {
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
-    gap: 12px;
+    align-items: center;
     height: auto;
-    padding: 16px 24px;
+    padding: 8px 16px;
+  }
+  
+  .footer-info {
+    display: none;
   }
   
   .export-btn-group {
-    width: 100%;
     flex-direction: row;
-    gap: 8px;
+    gap: 6px;
   }
   
   .export-btn {
-    flex: 1;
     justify-content: center;
-    padding: 10px 8px;
-    font-size: 13px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+  
+  .footer-left {
+    width: 100%;
+    align-items: center;
   }
   
   .export-error {
