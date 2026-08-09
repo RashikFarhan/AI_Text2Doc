@@ -267,9 +267,50 @@ body {
   flex-shrink: 0;
 }
 
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .footer-info {
   font-size: 12px;
   color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+.github-star-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--text-primary) !important;
+  font-weight: 500;
+  transition: all 0.2s !important;
+}
+
+.github-star-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--text-muted);
 }
 
 /* ─── Export button ──────────────────────────────────── */
@@ -526,12 +567,15 @@ body {
   
   .export-btn-group {
     width: 100%;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 8px;
   }
   
   .export-btn {
-    width: 100%;
+    flex: 1;
     justify-content: center;
+    padding: 10px 8px;
+    font-size: 13px;
   }
   
   .export-error {

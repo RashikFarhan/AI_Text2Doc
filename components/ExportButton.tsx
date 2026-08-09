@@ -160,9 +160,13 @@ export default function ExportButton({ text, normalizedHtml }: ExportButtonProps
     @media print {
       @page {
         size: A4;
-        margin: 20mm 20mm;
+        margin: 0;
       }
-      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
+        padding: 20mm;
+      }
       h1, h2, h3, h4, h5, h6 { break-after: avoid; }
       pre, table, figure, .katex-display, .diagram-svg-wrapper { break-inside: avoid; }
     }

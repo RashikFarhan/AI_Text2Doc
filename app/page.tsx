@@ -71,9 +71,22 @@ export default function Home() {
 
       {/* ─ Footer ─ */}
       <footer className="app-footer">
-        <span className="footer-info">
-          {wordCount} words · {charCount} characters
-        </span>
+        <div className="footer-left">
+          <span className="footer-info">
+            {wordCount} words · {charCount} characters
+          </span>
+          <div className="footer-links">
+            <a href="https://github.com/RashikFarhan" target="_blank" rel="noopener noreferrer">
+              Made by RashikFarhan
+            </a>
+            <a href="https://github.com/RashikFarhan/AI_Text2Doc" target="_blank" rel="noopener noreferrer" className="github-star-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              Star
+            </a>
+          </div>
+        </div>
         <ExportButton text={normalizedText} normalizedHtml={normalizedHtml} />
       </footer>
     </div>
