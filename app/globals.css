@@ -414,17 +414,105 @@ body {
   font-family: 'Geist Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace !important;
 }
 
+/* ─── Export button group ──────────────────────────────── */
+.export-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.export-error {
+  font-size: 12px;
+  color: #f87171;
+  background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.25);
+  border-radius: 6px;
+  padding: 4px 10px;
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.export-btn-pdf {
+  background: linear-gradient(135deg, #475569, #334155);
+}
+
+/* ─── Header subtitle ────────────────────────────────── */
+.header-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ─── Mobile Tabs (Hidden on Desktop) ────────────────── */
+.mobile-tab-bar {
+  display: none;
+}
+
 /* ─── Mobile Responsiveness ──────────────────────────── */
 @media (max-width: 768px) {
   .app-main {
     flex-direction: column;
   }
   
+  /* The tabs at the top */
+  .mobile-tab-bar {
+    display: flex;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  
+  .mobile-tab {
+    flex: 1;
+    padding: 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  
+  .mobile-tab-active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  
+  .mobile-tab-badge {
+    position: absolute;
+    top: 10px;
+    right: 30%;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 4px var(--accent-glow);
+  }
+  
+  /* Panels in mobile view */
   .panel-left, .panel-right {
     width: 100%;
-    height: 50%;
     border-right: none;
     border-bottom: 1px solid var(--border);
+    height: 100%;
+  }
+
+  .mobile-panel-hidden {
+    display: none !important;
+  }
+
+  .mobile-panel-active {
+    display: flex !important;
   }
 
   /* Make export button full width on narrow screens */
@@ -436,13 +524,22 @@ body {
     padding: 16px 24px;
   }
   
+  .export-btn-group {
+    width: 100%;
+    flex-direction: column;
+  }
+  
   .export-btn {
     width: 100%;
     justify-content: center;
   }
   
+  .export-error {
+    max-width: 100%;
+  }
+  
   /* Hide the subtitle in header to save space */
-  .app-header > div:last-child {
+  .header-subtitle {
     display: none;
   }
 }

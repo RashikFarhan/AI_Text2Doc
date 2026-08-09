@@ -5,13 +5,15 @@ import TextEditor from "@/components/TextEditor";
 import Preview from "@/components/Preview";
 import ExportButton from "@/components/ExportButton";
 import { normalizeText } from "@/lib/normalize";
+import { renderMarkdown } from "@/lib/markdown";
 
 export default function Home() {
-  // Raw text from the editor — never mutated
   const [text, setText] = useState("");
+  // Mobile: which tab is active — "editor" or "preview"
+  const [mobileTab, setMobileTab] = useState<"editor" | "preview">("editor");
 
-  // Normalized text derived from raw — used by preview and export
   const normalizedText = useMemo(() => normalizeText(text), [text]);
+  const normalizedHtml = useMemo(() => renderMarkdown(normalizedText), [normalizedText]);
 
   const charCount = text.length;
   const wordCount = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
@@ -24,20 +26,45 @@ export default function Home() {
           <div className="app-logo-icon">✦</div>
           AI Text Formatter
         </div>
-        <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+        <div className="header-subtitle">
           Markdown + LaTeX → DOCX
         </div>
       </header>
 
-      {/* ─ Main Split ─ */}
+      {/* ─ Mobile Tab Bar (hidden on desktop) ─ */}
+      <div className="mobile-tab-bar">
+        <button
+          className={`mobile-tab ${mobileTab === "editor" ? "mobile-tab-active" : ""}`}
+          onClick={() => setMobileTab("editor")}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Editor
+        </button>
+        <button
+          className={`mobile-tab ${mobileTab === "preview" ? "mobile-tab-active" : ""}`}
+          onClick={() => setMobileTab("preview")}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          Preview
+          {text && <span className="mobile-tab-badge" />}
+        </button>
+      </div>
+
+      {/* ─ Main Split (desktop) / Tabbed (mobile) ─ */}
       <main className="app-main">
-        {/* Left: raw editor */}
-        <section className="panel panel-left">
+        {/* Left / Editor tab */}
+        <section className={`panel panel-left ${mobileTab === "editor" ? "mobile-panel-active" : "mobile-panel-hidden"}`}>
           <TextEditor text={text} setText={setText} />
         </section>
 
-        {/* Right: normalised preview */}
-        <section className="panel panel-right">
+        {/* Right / Preview tab */}
+        <section className={`panel panel-right ${mobileTab === "preview" ? "mobile-panel-active" : "mobile-panel-hidden"}`}>
           <Preview text={normalizedText} />
         </section>
       </main>
@@ -47,8 +74,7 @@ export default function Home() {
         <span className="footer-info">
           {wordCount} words · {charCount} characters
         </span>
-        {/* Export also uses normalised text */}
-        <ExportButton text={normalizedText} />
+        <ExportButton text={normalizedText} normalizedHtml={normalizedHtml} />
       </footer>
     </div>
   );
