@@ -100,8 +100,8 @@ function tryRenderFlowchart(lines: string[]): string | null {
       // Node Box
       svgElements.push(`
   <g class="flow-node">
-    <rect x="${x}" y="${y}" width="${nodeWidth}" height="${nodeHeight}" rx="8" ry="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
-    <text x="${x + nodeWidth / 2}" y="${y + nodeHeight / 2 + 5}" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="600">${escapeXml(nodeText)}</text>
+    <rect x="${x}" y="${y}" width="${nodeWidth}" height="${nodeHeight}" rx="8" ry="8" fill="transparent" stroke="currentColor" stroke-width="1.5"/>
+    <text x="${x + nodeWidth / 2}" y="${y + nodeHeight / 2 + 5}" text-anchor="middle" fill="currentColor" font-size="12" font-weight="600">${escapeXml(nodeText)}</text>
   </g>`);
 
       // Horizontal Arrows
@@ -111,13 +111,13 @@ function tryRenderFlowchart(lines: string[]): string | null {
           const arrowEndX = x + nodeWidth + nodeGapX;
           const arrowY = y + nodeHeight / 2;
           svgElements.push(`
-  <line x1="${arrowStartX}" y1="${arrowY}" x2="${arrowEndX - 6}" y2="${arrowY}" stroke="#60a5fa" stroke-width="2" marker-end="url(#diag-arrow-right)"/>`);
+  <line x1="${arrowStartX}" y1="${arrowY}" x2="${arrowEndX - 6}" y2="${arrowY}" stroke="currentColor" stroke-width="2" marker-end="url(#diag-arrow-right)"/>`);
         } else if (row.direction === "left") {
           const arrowStartX = x + nodeWidth + nodeGapX;
           const arrowEndX = x + nodeWidth;
           const arrowY = y + nodeHeight / 2;
           svgElements.push(`
-  <line x1="${arrowStartX}" y1="${arrowY}" x2="${arrowEndX + 6}" y2="${arrowY}" stroke="#60a5fa" stroke-width="2" marker-end="url(#diag-arrow-left)"/>`);
+  <line x1="${arrowStartX}" y1="${arrowY}" x2="${arrowEndX + 6}" y2="${arrowY}" stroke="currentColor" stroke-width="2" marker-end="url(#diag-arrow-left)"/>`);
         }
       }
     });
@@ -128,7 +128,7 @@ function tryRenderFlowchart(lines: string[]): string | null {
       const startY = y + nodeHeight;
       const endY = y + nodeHeight + rowGapY;
       svgElements.push(`
-  <line x1="${lastNodeX}" y1="${startY}" x2="${lastNodeX}" y2="${endY - 6}" stroke="#60a5fa" stroke-width="2" marker-end="url(#diag-arrow-down)"/>`);
+  <line x1="${lastNodeX}" y1="${startY}" x2="${lastNodeX}" y2="${endY - 6}" stroke="currentColor" stroke-width="2" marker-end="url(#diag-arrow-down)"/>`);
     }
   });
 
@@ -137,16 +137,16 @@ function tryRenderFlowchart(lines: string[]): string | null {
 <svg viewBox="0 0 ${totalWidth} ${totalHeight}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="diagram-svg" style="max-width: ${totalWidth}px;">
   <defs>
     <marker id="diag-arrow-right" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#60a5fa"/>
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="currentColor"/>
     </marker>
     <marker id="diag-arrow-left" viewBox="0 0 10 10" refX="4" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 10 1 L 0 5 L 10 9 z" fill="#60a5fa"/>
+      <path d="M 10 1 L 0 5 L 10 9 z" fill="currentColor"/>
     </marker>
     <marker id="diag-arrow-down" viewBox="0 0 10 10" refX="5" refY="6" markerWidth="6" markerHeight="6" orient="auto">
-      <path d="M 1 0 L 5 10 L 9 0 z" fill="#60a5fa"/>
+      <path d="M 1 0 L 5 10 L 9 0 z" fill="currentColor"/>
     </marker>
   </defs>
-  <rect x="2" y="2" width="${totalWidth - 4}" height="${totalHeight - 4}" rx="12" ry="12" fill="#0b0f19" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="2" y="2" width="${totalWidth - 4}" height="${totalHeight - 4}" rx="12" ry="12" fill="transparent" stroke="currentColor" stroke-width="1.5"/>
   ${svgElements.join("\n")}
 </svg>
 </div>`;
@@ -221,39 +221,33 @@ function tryRenderMultiColumnBox(lines: string[]): string | null {
 <div class="diagram-svg-wrapper">
 <svg viewBox="0 0 ${totalWidth} ${totalHeight}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="diagram-svg" style="max-width: ${totalWidth}px;">
   <defs>
-    <linearGradient id="boxBgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#1e293b"/>
-      <stop offset="100%" stop-color="#0b0f19"/>
-    </linearGradient>
-    <linearGradient id="titleBgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.3"/>
-    </linearGradient>
+    
+    
   </defs>
 
-  <rect x="2" y="2" width="${totalWidth - 4}" height="${totalHeight - 4}" rx="10" ry="10" fill="url(#boxBgGrad)" stroke="#334155" stroke-width="1.5"/>
+  <rect x="2" y="2" width="${totalWidth - 4}" height="${totalHeight - 4}" rx="10" ry="10" fill="transparent" stroke="currentColor" stroke-width="1.5"/>
 
   <!-- Title Header -->
-  <path d="M 2 12 Q 2 2 12 2 L ${totalWidth - 12} 2 Q ${totalWidth - 2} 2 ${totalWidth - 2} 12 L ${totalWidth - 2} ${headerHeight} L 2 ${headerHeight} Z" fill="url(#titleBgGrad)" stroke="#334155" stroke-width="1"/>
-  <text x="${totalWidth / 2}" y="28" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="700" letter-spacing="1.5">${escapeXml(title)}</text>
+  <path d="M 2 12 Q 2 2 12 2 L ${totalWidth - 12} 2 Q ${totalWidth - 2} 2 ${totalWidth - 2} 12 L ${totalWidth - 2} ${headerHeight} L 2 ${headerHeight} Z" fill="transparent" stroke="currentColor" stroke-width="1"/>
+  <text x="${totalWidth / 2}" y="28" text-anchor="middle" fill="currentColor" font-size="14" font-weight="700" letter-spacing="1.5">${escapeXml(title)}</text>
 
   ${
     col1Header || col2Header
       ? `
-  <line x1="2" y1="${headerHeight + subHeaderHeight}" x2="${totalWidth - 2}" y2="${headerHeight + subHeaderHeight}" stroke="#334155" stroke-width="1"/>
-  <line x1="${totalWidth / 2}" y1="${headerHeight}" x2="${totalWidth / 2}" y2="${totalHeight - 2}" stroke="#334155" stroke-width="1"/>
-  <text x="${totalWidth / 4}" y="${headerHeight + 25}" text-anchor="middle" fill="#93c5fd" font-size="13" font-weight="600">${escapeXml(col1Header)}</text>
-  <text x="${(3 * totalWidth) / 4}" y="${headerHeight + 25}" text-anchor="middle" fill="#93c5fd" font-size="13" font-weight="600">${escapeXml(col2Header)}</text>`
-      : `<line x1="${totalWidth / 2}" y1="${headerHeight}" x2="${totalWidth / 2}" y2="${totalHeight - 2}" stroke="#334155" stroke-width="1"/>`
+  <line x1="2" y1="${headerHeight + subHeaderHeight}" x2="${totalWidth - 2}" y2="${headerHeight + subHeaderHeight}" stroke="currentColor" stroke-width="1"/>
+  <line x1="${totalWidth / 2}" y1="${headerHeight}" x2="${totalWidth / 2}" y2="${totalHeight - 2}" stroke="currentColor" stroke-width="1"/>
+  <text x="${totalWidth / 4}" y="${headerHeight + 25}" text-anchor="middle" fill="currentColor" font-size="13" font-weight="600">${escapeXml(col1Header)}</text>
+  <text x="${(3 * totalWidth) / 4}" y="${headerHeight + 25}" text-anchor="middle" fill="currentColor" font-size="13" font-weight="600">${escapeXml(col2Header)}</text>`
+      : `<line x1="${totalWidth / 2}" y1="${headerHeight}" x2="${totalWidth / 2}" y2="${totalHeight - 2}" stroke="currentColor" stroke-width="1"/>`
   }
 
   <!-- Left Column Items -->
-  <g fill="#cbd5e1" font-size="13">
+  <g fill="currentColor" font-size="13">
     ${col1Items.map((item, idx) => `<text x="24" y="${headerHeight + subHeaderHeight + 28 + idx * 24}">${escapeXml(item)}</text>`).join("\n    ")}
   </g>
 
   <!-- Right Column Items -->
-  <g fill="#cbd5e1" font-size="13">
+  <g fill="currentColor" font-size="13">
     ${col2Items.map((item, idx) => `<text x="${totalWidth / 2 + 24}" y="${headerHeight + subHeaderHeight + 28 + idx * 24}">${escapeXml(item)}</text>`).join("\n    ")}
   </g>
 </svg>
@@ -338,38 +332,38 @@ function tryRenderBranchingTree(lines: string[]): string | null {
 <svg viewBox="0 0 ${totalWidth} ${totalHeight}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="diagram-svg" style="max-width: ${totalWidth}px;">
   <defs>
     <marker id="diag-arrow-down-tree" viewBox="0 0 10 10" refX="5" refY="6" markerWidth="6" markerHeight="6" orient="auto">
-      <path d="M 1 0 L 5 10 L 9 0 z" fill="#60a5fa"/>
+      <path d="M 1 0 L 5 10 L 9 0 z" fill="currentColor"/>
     </marker>
   </defs>
 
-  <rect x="2" y="2" width="${totalWidth - 4}" height="${totalHeight - 4}" rx="12" ry="12" fill="#0b0f19" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="2" y="2" width="${totalWidth - 4}" height="${totalHeight - 4}" rx="12" ry="12" fill="transparent" stroke="currentColor" stroke-width="1.5"/>
 
   <!-- Root Node -->
-  <rect x="${rootX}" y="${rootY}" width="${rootWidth}" height="${rootHeight}" rx="8" ry="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
-  <text x="${totalWidth / 2}" y="${rootY + 27}" text-anchor="middle" fill="#93c5fd" font-size="13" font-weight="700" letter-spacing="1">${escapeXml(rootTitle)}</text>
+  <rect x="${rootX}" y="${rootY}" width="${rootWidth}" height="${rootHeight}" rx="8" ry="8" fill="transparent" stroke="currentColor" stroke-width="1.5"/>
+  <text x="${totalWidth / 2}" y="${rootY + 27}" text-anchor="middle" fill="currentColor" font-size="13" font-weight="700" letter-spacing="1">${escapeXml(rootTitle)}</text>
 
   <!-- Connectors -->
-  <line x1="${totalWidth / 2}" y1="${rootY + rootHeight}" x2="${totalWidth / 2}" y2="${stemEndY}" stroke="#60a5fa" stroke-width="2"/>
-  <path d="M ${leftCenter} ${cardsY - 6} L ${leftCenter} ${forkY} L ${rightCenter} ${forkY} L ${rightCenter} ${cardsY - 6}" fill="none" stroke="#60a5fa" stroke-width="2"/>
-  <line x1="${leftCenter}" y1="${cardsY - 10}" x2="${leftCenter}" y2="${cardsY}" stroke="#60a5fa" stroke-width="2" marker-end="url(#diag-arrow-down-tree)"/>
-  <line x1="${rightCenter}" y1="${cardsY - 10}" x2="${rightCenter}" y2="${cardsY}" stroke="#60a5fa" stroke-width="2" marker-end="url(#diag-arrow-down-tree)"/>
+  <line x1="${totalWidth / 2}" y1="${rootY + rootHeight}" x2="${totalWidth / 2}" y2="${stemEndY}" stroke="currentColor" stroke-width="2"/>
+  <path d="M ${leftCenter} ${cardsY - 6} L ${leftCenter} ${forkY} L ${rightCenter} ${forkY} L ${rightCenter} ${cardsY - 6}" fill="none" stroke="currentColor" stroke-width="2"/>
+  <line x1="${leftCenter}" y1="${cardsY - 10}" x2="${leftCenter}" y2="${cardsY}" stroke="currentColor" stroke-width="2" marker-end="url(#diag-arrow-down-tree)"/>
+  <line x1="${rightCenter}" y1="${cardsY - 10}" x2="${rightCenter}" y2="${cardsY}" stroke="currentColor" stroke-width="2" marker-end="url(#diag-arrow-down-tree)"/>
 
   <!-- Left Card -->
   <g class="tree-card">
-    <rect x="${leftCardX}" y="${cardsY}" width="${cardWidth}" height="${cardHeight}" rx="8" ry="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
-    <rect x="${leftCardX}" y="${cardsY}" width="${cardWidth}" height="36" rx="8" ry="8" fill="#1d4ed8" fill-opacity="0.25" stroke="#334155" stroke-width="1"/>
-    <text x="${leftCenter}" y="${cardsY + 23}" text-anchor="middle" fill="#60a5fa" font-size="12" font-weight="700">${escapeXml(leftTitle)}</text>
-    <g fill="#cbd5e1" font-size="12">
+    <rect x="${leftCardX}" y="${cardsY}" width="${cardWidth}" height="${cardHeight}" rx="8" ry="8" fill="transparent" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="${leftCardX}" y="${cardsY}" width="${cardWidth}" height="36" rx="8" ry="8" fill="transparent" stroke="currentColor" stroke-width="1"/>
+    <text x="${leftCenter}" y="${cardsY + 23}" text-anchor="middle" fill="currentColor" font-size="12" font-weight="700">${escapeXml(leftTitle)}</text>
+    <g fill="currentColor" font-size="12">
       ${leftBullets.map((it, idx) => `<text x="${leftCardX + 16}" y="${cardsY + 62 + idx * 24}">${escapeXml(it)}</text>`).join("\n      ")}
     </g>
   </g>
 
   <!-- Right Card -->
   <g class="tree-card">
-    <rect x="${rightCardX}" y="${cardsY}" width="${cardWidth}" height="${cardHeight}" rx="8" ry="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
-    <rect x="${rightCardX}" y="${cardsY}" width="${cardWidth}" height="36" rx="8" ry="8" fill="#059669" fill-opacity="0.25" stroke="#334155" stroke-width="1"/>
-    <text x="${rightCenter}" y="${cardsY + 23}" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">${escapeXml(rightTitle)}</text>
-    <g fill="#cbd5e1" font-size="12">
+    <rect x="${rightCardX}" y="${cardsY}" width="${cardWidth}" height="${cardHeight}" rx="8" ry="8" fill="transparent" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="${rightCardX}" y="${cardsY}" width="${cardWidth}" height="36" rx="8" ry="8" fill="transparent" stroke="currentColor" stroke-width="1"/>
+    <text x="${rightCenter}" y="${cardsY + 23}" text-anchor="middle" fill="currentColor" font-size="12" font-weight="700">${escapeXml(rightTitle)}</text>
+    <g fill="currentColor" font-size="12">
       ${rightBullets.map((it, idx) => `<text x="${rightCardX + 16}" y="${cardsY + 62 + idx * 24}">${escapeXml(it)}</text>`).join("\n      ")}
     </g>
   </g>
@@ -393,8 +387,8 @@ function renderMonospaceSvgCanvas(lines: string[]): string {
   return `
 <div class="diagram-svg-wrapper">
 <svg viewBox="0 0 ${totalWidth} ${totalHeight}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="diagram-svg diagram-mono" style="max-width: ${totalWidth}px; font-family: 'Geist Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace;">
-  <rect x="2" y="2" width="${totalWidth - 4}" height="${totalHeight - 4}" rx="8" ry="8" fill="#0b0f19" stroke="#1e293b" stroke-width="1.5"/>
-  <g fill="#93c5fd" font-size="13" line-height="1.5">
+  <rect x="2" y="2" width="${totalWidth - 4}" height="${totalHeight - 4}" rx="8" ry="8" fill="transparent" stroke="currentColor" stroke-width="1.5"/>
+  <g fill="currentColor" font-size="13" line-height="1.5">
     ${lines.map((l, i) => `<text x="${paddingX}" y="${paddingY + 14 + i * lineHeight}" xml:space="preserve">${escapeXml(l)}</text>`).join("\n    ")}
   </g>
 </svg>

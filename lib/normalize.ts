@@ -131,7 +131,7 @@ export function normalizeText(input: string): string {
     }
     let cleanMath = math.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "").trim();
     // Convert pipe in math to \vert so Markdown tables don't split columns at math pipes
-    cleanMath = cleanMath.replace(/\|\|/g, "\\Vert ").replace(/(?<!\\)\|/g, "\\vert ");
+    cleanMath = cleanMath.replace(/\|\|/g, "\\Vert ").replace(/(^|[^\\])\|/g, "$1\\vert ");
     const ph = `@@MATH_INLINE_${mathCounter++}@@`;
     mathMap.push({ placeholder: ph, original: `$${cleanMath}$` });
     return `${prefix}${ph}`;

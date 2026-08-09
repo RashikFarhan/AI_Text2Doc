@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
+    "html2pdf.js": "^0.14.0",
     "katex": "^0.16.38",
     "markdown-it": "^14.1.1",
     "markdown-it-katex": "^2.0.3",
