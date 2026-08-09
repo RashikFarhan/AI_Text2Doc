@@ -42,3 +42,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Mobile App specifics
+mobile-app/node_modules
+mobile-app/dist
+mobile-app/android/app/build
+mobile-app/android/.gradle
+mobile-app/android/local.properties
+*.apk
+mobile-app/android/.tmp_jdk/

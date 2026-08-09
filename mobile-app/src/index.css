@@ -1,0 +1,763 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ─── Reset ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #__next, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ─── Design tokens ──────────────────────────────────── */
+:root {
+  --bg-base:        #0f1117;
+  --bg-panel:       #161b27;
+  --bg-editor:      #131720;
+  --bg-preview:     #1a1f2e;
+  --border:         #252d3d;
+  --border-subtle:  #1e2535;
+  --accent:         #6366f1;
+  --accent-hover:   #818cf8;
+  --accent-glow:    rgba(99, 102, 241, 0.25);
+  --text-primary:   #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted:     #475569;
+  --header-h:       56px;
+  --footer-h:       64px;
+}
+
+/* ─── Base body ──────────────────────────────────────── */
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', 'Geist', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── App shell ──────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* ─── Header ─────────────────────────────────────────── */
+.app-header {
+  height: var(--header-h);
+  min-height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.app-logo-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), #a78bfa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.app-badge {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+/* ─── Main split layout ──────────────────────────────── */
+.app-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ─── Panel shared ───────────────────────────────────── */
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.panel-left {
+  width: 50%;
+  border-right: 1px solid var(--border);
+  background: var(--bg-editor);
+}
+
+.panel-right {
+  width: 50%;
+  background: var(--bg-preview);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,0.02);
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.panel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+
+/* ─── Editor textarea ────────────────────────────────── */
+.editor-textarea {
+  flex: 1;
+  width: 100%;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.75;
+  padding: 24px 28px;
+  font-family: 'Geist Mono', 'Fira Code', 'JetBrains Mono', monospace;
+  min-height: 0;
+}
+
+.editor-textarea::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ─── Preview area ───────────────────────────────────── */
+.preview-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden; /* prevent horizontal bleed */
+  padding: 28px 20px; /* narrower padding on mobile */
+  min-height: 0;
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.preview-body::-webkit-scrollbar {
+  width: 5px;
+}
+.preview-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.preview-body::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+.preview-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+}
+
+.preview-empty-icon {
+  font-size: 40px;
+  opacity: 0.3;
+}
+
+.preview-empty-text {
+  font-size: 14px;
+  font-style: italic;
+  opacity: 0.6;
+}
+
+/* ─── Prose theming ──────────────────────────────────── */
+.prose {
+  --tw-prose-body:          var(--text-primary);
+  --tw-prose-headings:      #f1f5f9;
+  --tw-prose-lead:          var(--text-secondary);
+  --tw-prose-links:         var(--accent-hover);
+  --tw-prose-bold:          #f1f5f9;
+  --tw-prose-counters:      var(--text-muted);
+  --tw-prose-bullets:       var(--accent);
+  --tw-prose-hr:            var(--border);
+  --tw-prose-quotes:        var(--text-secondary);
+  --tw-prose-quote-borders: var(--accent);
+  --tw-prose-captions:      var(--text-muted);
+  --tw-prose-code:          #a5f3fc;
+  --tw-prose-pre-code:      #e2e8f0;
+  --tw-prose-pre-bg:        #0d1117;
+  --tw-prose-th-borders:    var(--border);
+  --tw-prose-td-borders:    var(--border-subtle);
+}
+
+.prose pre {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.prose code:not(pre code) {
+  background: rgba(165, 243, 252, 0.08);
+  border: 1px solid rgba(165, 243, 252, 0.15);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.85em;
+}
+
+/* Wrap tables so they scroll horizontally instead of breaking layout */
+.prose table {
+  border-collapse: collapse;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose th {
+  background: rgba(99, 102, 241, 0.1);
+  white-space: nowrap;
+}
+
+.prose td {
+  word-break: break-word;
+}
+
+/* Diagrams — contain within preview width */
+.diagram-svg-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.diagram-svg-wrapper svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* KaTeX display math — horizontal scroll on narrow screens */
+.katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── Footer / toolbar ───────────────────────────────── */
+.app-footer {
+  height: var(--footer-h);
+  min-height: var(--footer-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-info {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+.github-star-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--text-primary) !important;
+  font-weight: 500;
+  transition: all 0.2s !important;
+}
+
+.github-star-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--text-muted);
+}
+
+/* ─── Export button ──────────────────────────────────── */
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: linear-gradient(135deg, var(--accent), #7c3aed);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  box-shadow: 0 4px 20px var(--accent-glow);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.export-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.08));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.export-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px var(--accent-glow);
+}
+
+.export-btn:hover::before {
+  opacity: 1;
+}
+
+.export-btn:active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 2px 10px var(--accent-glow);
+}
+
+/* ─── Divider ─────────────────────────────────────────── */
+.panel-divider {
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* ─── KaTeX Anti-Prose Overrides & Layout Protection ── */
+.prose .katex {
+  font-size: 1.1em;
+  text-indent: 0;
+  text-rendering: auto;
+  border-collapse: separate;
+}
+
+.prose .katex-display {
+  display: block;
+  margin: 1.25em 0;
+  text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0;
+}
+
+.prose .katex-display > .katex {
+  display: inline-block;
+  text-align: initial;
+}
+
+.prose .katex * {
+  border-color: transparent !important;
+}
+
+/* Ensure KaTeX vlist tables are not affected by Tailwind prose table styling */
+.prose .katex .vlist-t {
+  display: inline-table !important;
+  table-layout: fixed !important;
+  border-collapse: separate !important;
+}
+.prose .katex .vlist-r {
+  display: table-row !important;
+}
+.prose .katex .vlist {
+  display: table-cell !important;
+  vertical-align: bottom !important;
+  position: relative !important;
+}
+
+/* ─── Diagram & Code Block Styling ──────────────────── */
+.prose pre {
+  background: #0d1117 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 16px 20px !important;
+  overflow-x: auto !important;
+  font-family: 'Geist Mono', 'Fira Code', 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+
+.prose pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #e2e8f0 !important;
+  font-family: inherit !important;
+  white-space: pre !important;
+}
+
+/* ─── Vector Diagram Styles ─────────────────────────── */
+.diagram-svg-wrapper {
+  margin: 1.5em 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  background: #080c14;
+  padding: 12px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.diagram-svg {
+  display: block;
+  height: auto;
+  user-select: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.diagram-svg text {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.diagram-mono text {
+  font-family: 'Geist Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace !important;
+}
+
+/* ─── Export button group ──────────────────────────────── */
+.export-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.export-error {
+  font-size: 12px;
+  color: #f87171;
+  background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.25);
+  border-radius: 6px;
+  padding: 4px 10px;
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.export-btn-pdf {
+  background: linear-gradient(135deg, #475569, #334155);
+}
+
+/* ─── Header subtitle & Info Button ────────────────────── */
+.header-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  margin-left: 8px;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.info-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Info Flyout (SEO Friendly, CSS Hidden) ─────────── */
+.info-flyout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.info-flyout-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.info-flyout {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 400px;
+  height: 100vh;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-flyout.open {
+  transform: translateX(0);
+}
+
+.info-flyout-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-flyout-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.info-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  transition: all 0.2s;
+}
+
+.info-close-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.info-flyout-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.info-flyout-content p {
+  margin-bottom: 16px;
+}
+
+.info-flyout-content h3 {
+  font-size: 15px;
+  color: var(--text-primary);
+  margin: 24px 0 12px;
+  font-weight: 600;
+}
+
+.info-flyout-content h4 {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin: 20px 0 8px;
+  font-weight: 600;
+}
+
+.github-star-btn-large {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: var(--text-primary) !important;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s !important;
+  margin-bottom: 16px;
+}
+
+.github-star-btn-large:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--text-muted);
+}
+
+/* ─── Mobile Tabs (Hidden on Desktop) ────────────────── */
+.mobile-tab-bar {
+  display: none;
+}
+
+/* ─── Mobile Responsiveness ──────────────────────────── */
+@media (max-width: 768px) {
+  .app-main {
+    flex-direction: column;
+  }
+  
+  /* The tabs at the top */
+  .mobile-tab-bar {
+    display: flex;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  
+  .mobile-tab {
+    flex: 1;
+    padding: 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  
+  .mobile-tab-active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  
+  .mobile-tab-badge {
+    position: absolute;
+    top: 10px;
+    right: 30%;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 4px var(--accent-glow);
+  }
+  
+  /* Panels in mobile view */
+  .panel-left, .panel-right {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    height: 100%;
+  }
+
+  .mobile-panel-hidden {
+    display: none !important;
+  }
+
+  .mobile-panel-active {
+    display: flex !important;
+  }
+
+  /* Make footer small and hide word count on mobile */
+  .app-footer {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    padding: 8px 16px;
+  }
+  
+  .footer-info {
+    display: none;
+  }
+  
+  .export-btn-group {
+    flex-direction: row;
+    gap: 6px;
+  }
+  
+  .export-btn {
+    justify-content: center;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+  
+  .footer-left {
+    width: 100%;
+    align-items: center;
+  }
+  
+  .export-error {
+    max-width: 100%;
+  }
+  
+  /* Hide the subtitle in header to save space */
+  .header-subtitle {
+    display: none;
+  }
+}
