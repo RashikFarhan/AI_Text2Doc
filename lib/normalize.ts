@@ -106,15 +106,37 @@ export function normalizeText(input: string): string {
   const mathMap: PlaceholderEntry[] = [];
   let mathCounter = 0;
 
+  // Helper: strip invisible chars and fix double-escaped backslashes that mobile
+  // keyboards/apps produce. Mobile clipboards often turn \frac into \\frac.
+  // We detect this by checking if ALL LaTeX commands use double-backslash, then halve them.
+  function fixMathEscaping(math: string): string {
+    // Remove invisible Unicode chars (zero-width space, NBSP, etc.)
+    let m = math.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "").trim();
+    // Check for double-escaped commands: \\frac, \\alpha, etc.
+    const hasDoubleEscape = /\\\\[a-zA-Z{([]/.test(m);
+    // Check for single-escaped commands by looking for \X where X is a letter
+    // (We can't use lookbehind on mobile Safari, so we check the whole string differently)
+    // A single-backslash command looks like: one \ followed by a letter, not preceded by \
+    // Simple heuristic: split on \\ and check if any resulting segment starts with \letter
+    const hasSingleEscape = hasDoubleEscape
+      ? m.split("\\\\").some((seg, i) => i === 0 && /\\[a-zA-Z{([]/.test(seg))
+      : /\\[a-zA-Z{([]/.test(m);
+    if (hasDoubleEscape && !hasSingleEscape) {
+      // All commands are double-escaped — halve them
+      m = m.replace(/\\\\([a-zA-Z{([])/g, "\\$1");
+    }
+    return m;
+  }
+
   // 2a. Normalize \[ ... \] display math to $$ ... $$ (supports \\[, \\\[ from mobile)
-  text = text.replace(/\\+\[([\s\S]*?)\\+\]/g, (_, math) => `$$\n${math.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "").trim()}\n$$`);
+  text = text.replace(/\\+\[([\s\S]*?)\\+\]/g, (_, math) => `$$\n${fixMathEscaping(math)}\n$$`);
 
   // 2b. Normalize \( ... \) inline math to $ ... $ (supports \\(, \\\( from mobile)
-  text = text.replace(/\\+\(([\s\S]*?)\\+\)/g, (_, math) => `$${math.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "").trim()}$`);
+  text = text.replace(/\\+\(([\s\S]*?)\\+\)/g, (_, math) => `$${fixMathEscaping(math)}$`);
 
   // 2c. Protect existing $$ ... $$ block math FIRST so inner environments (bmatrix, aligned, etc.) are never double-wrapped
   text = text.replace(/\$\$([\s\S]*?)\$\$/g, (_, math) => {
-    let cleanMath = math.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "").trim();
+    let cleanMath = fixMathEscaping(math);
     // Convert \begin{align} to \begin{aligned} for KaTeX & Pandoc compatibility
     cleanMath = cleanMath
       .replace(/\\begin\{align\*?\}/g, "\\begin{aligned}")
@@ -129,7 +151,7 @@ export function normalizeText(input: string): string {
     if (/^\s*\d+([,\.]\d+)?\s*$/.test(math)) {
       return match; // Currency, preserve as-is
     }
-    let cleanMath = math.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, "").trim();
+    let cleanMath = fixMathEscaping(math);
     // Convert pipe in math to \vert so Markdown tables don't split columns at math pipes
     cleanMath = cleanMath.replace(/\|\|/g, "\\Vert ").replace(/(^|[^\\])\|/g, "$1\\vert ");
     const ph = `@@MATH_INLINE_${mathCounter++}@@`;
