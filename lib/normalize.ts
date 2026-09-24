@@ -358,13 +358,29 @@ export function normalizeText(input: string): string {
   // ── Step 7: Restore placeholders ─────────────────────────────────────────
   const sortedMath = [...mathMap].sort((a, b) => b.placeholder.localeCompare(a.placeholder));
   for (const { placeholder, original } of sortedMath) {
-    text = text.split(placeholder).join(original);
+    if (original.startsWith("$$\n")) {
+      // If block math immediately follows a list marker on the same line, push it to a new line
+      // and indent it so markdown-it properly nests it inside the list item.
+      // This prevents the math_block parser from spanning across unrelated paragraphs.
+      const listRegex = new RegExp(`(^|\\n)(\\s*)([\\*\\-\\+]|\\d+\\.)\\s*${placeholder}`, "g");
+      text = text.replace(listRegex, (match, p1, p2, p3) => {
+        const indentedMath = original.replace(/\n/g, `\n${p2}  `);
+        return `${p1}${p2}${p3}\n${p2}  ${indentedMath}`;
+      });
+      // For any other block math, ensure it sits on its own line
+      text = text.split(placeholder).join(`\n\n${original}\n\n`);
+    } else {
+      text = text.split(placeholder).join(original);
+    }
   }
 
   const sortedCode = [...codeMap].sort((a, b) => b.placeholder.localeCompare(a.placeholder));
   for (const { placeholder, original } of sortedCode) {
     text = text.split(placeholder).join(original);
   }
+
+  // Collapse excessive newlines introduced by math block padding
+  text = text.replace(/\n{3,}/g, "\n\n");
 
   return text.trim();
 }
